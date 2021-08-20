@@ -1,0 +1,71 @@
+
+
+{% extends "_base.html" %} 
+{% block content %}
+<h1 class='card-header'>MED CRM</h1>
+{% if user.is_staff or user.is_authenticated %}
+<div class="container">
+  <div class="row">
+    <a class="card col" href="../">
+      Назад
+    </a>
+  </div>
+</div>
+<div class="container">
+  <form method="post" class="card-body">
+    {% csrf_token %}
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item">Имя<br>{{ form.name }}</li>
+      <li class="list-group-item">Фамилия<br>{{ form.surname }}</li>
+      <li class="list-group-item">Взрослый<br>{{ form.isAdult }}</li>
+      {{ form.partner.as_hidden }}
+      <li class="list-group-item"><button class="button" type="submit">Добавить</button></li>
+    </ul>
+  </form>
+</div>
+<div class="container">
+    <table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Имя</th>
+            <th scope="col">Взрослый</th>
+            <th scope="col">Прибыль</th>
+            <th scope="col">Долг</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        {% for client in clients %}
+            <tr>
+                <td>{{ client.name }} {{ client.surname }}</td>
+                <td>
+                {% if client.isAdult %}
+                        Да
+                    {% else %}
+                        Нет
+                    {% endif %}
+                </td>
+                <form method="get" class="card-body">
+                <td><input type="number" name="payed" value="{{ client.payed }}" id="id_payed"></td>
+                <td><input type="number" name="bill" value="{{ client.bill }}" id="id_bill"></td>
+                <input type="hidden" name="client_id" value="{{ client.id }}" id="id_id">
+                <input type="hidden" name="method" value="edit">
+                <td><button class="button" type="submit">Изменить</button></td>
+                </form>
+                <form method="get" class="card-body">
+                <input type="hidden" name="id" value="{{ client.id }}" id="id_id">
+                <input type="hidden" name="method" value="delete">
+                <td><button class="button" type="submit">Удалить</button></td>
+                </form>
+            </tr>
+        {% endfor %}
+
+    </tbody>
+    </table>
+</div>
+{% else %}
+<div class='item'>
+<p class='desc'>Войдите в систему, чтобы увидеть эту страницу.</p>
+</div>
+{% endif %} 
+{% endblock %}

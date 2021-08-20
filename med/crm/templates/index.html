@@ -1,0 +1,24 @@
+
+
+{% extends "_base.html" %} 
+{% block content %}
+<h1 class='card-header'>MED CRM</h1>
+{% if user.is_staff %}
+<div class="container">
+  <div class="row">
+    {% for key, value in clinics.items %}
+    <a class="col" href="{{ key }}/">
+      {{ value }}
+    </a>
+    {% endfor %}
+  </div>
+</div>
+{% elif user.is_authenticated %}
+<div class="testbox">
+</div>
+{% else %}
+<div class='item'>
+<p class='desc'>Войдите в систему, чтобы увидеть эту страницу.</p>
+</div>
+{% endif %} 
+{% endblock %}

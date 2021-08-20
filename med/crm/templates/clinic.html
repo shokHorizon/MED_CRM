@@ -1,0 +1,28 @@
+
+
+{% extends "_base.html" %} 
+{% block content %}
+<h1 class='card-header'>MED CRM</h1>
+{% if user.is_authenticated %}
+<div class="container">
+  <div class="row">
+    <a class="card col" href="../">
+      Назад
+    </a>
+    <a class="card col" href="tasks/">
+      Список задач
+    </a>
+    <a class="card col" href="storage/">
+      Склад
+    </a>
+    <a class="card col" href="partners/">
+      Партнеры
+    </a>
+  </div>
+</div>
+{% else %}
+<div class='item'>
+<p class='desc'>Войдите в систему, чтобы увидеть эту страницу.</p>
+</div>
+{% endif %} 
+{% endblock %}

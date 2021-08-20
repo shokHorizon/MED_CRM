@@ -1,0 +1,74 @@
+
+
+{% extends "_base.html" %} 
+{% block content %}
+<h1 class='card-header'>MED CRM</h1>
+<div class="container">
+  <div class="row">
+    <a class="card col" href="../">
+      Назад
+    </a>
+  </div>
+</div>
+{% if user.is_staff %}
+<div class="container">
+  <form method="post" class="card-body">
+    {% csrf_token %}
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item">Название<br>{{ form.name }}</li>
+      <li class="list-group-item">Описание<br>{{ form.desc }}</li>
+      {{ form.clinic.as_hidden }}
+      {{ form.made.as_hidden }}
+      <li class="list-group-item"><button class="button" type="submit">Добавить</button></li>
+    </ul>
+  </form>
+</div>
+{% endif %}
+{% if user.is_authenticated %}
+<div class="container">
+    <table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Задача</th>
+            <th scope="col">Описание</th>
+            <th scope="col">Выполнение</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        {% for task in tasks %}
+            <tr>
+                <td>{{ task.name }}</td>
+                <td>{{ task.desc }}</td>
+                    {% if task.made %}
+                        <td class='table-success'>
+                        Готово
+                    {% else %}
+                        <td class='table-danger'>
+                        Не сделано
+                    {% endif %}
+                </td>
+                <td>
+                <form method="get" class="card-body">
+                <input type="hidden" name="name" value="{{ task.name }}" id="id_name">
+                {% if user.is_staff %}
+                <input type="hidden" name="method" value="delete">
+                <button class="button" type="submit">Удалить</button>
+                {% else %}
+                <input type="hidden" name="method" value="complete">
+                <button class="button" type="submit">Завершить</button>
+                {% endif %}
+                </form>
+                </td>
+            </tr>
+        {% endfor %}
+
+    </tbody>
+    </table>
+</div>
+{% else %}
+<div class='item'>
+<p class='desc'>Войдите в систему, чтобы увидеть эту страницу.</p>
+</div>
+{% endif %} 
+{% endblock %}
