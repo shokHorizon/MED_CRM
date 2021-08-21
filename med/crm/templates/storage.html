@@ -1,0 +1,65 @@
+
+
+{% extends "_base.html" %} 
+{% block content %}
+<h1 class='card-header'>MED CRM</h1>
+{% if user.is_staff or user.is_authenticated %}
+<div class="container">
+  <div class="row">
+    <a class="card col" href="../">
+      Назад
+    </a>
+  </div>
+</div>
+<div class="container">
+  <form method="post" class="card-body">
+    {% csrf_token %}
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item">Название<br>{{ form.name }}</li>
+      <li class="list-group-item">Количество<br>{{ form.amount }}</li>
+      {{ form.clinic.as_hidden }}
+      {{ form.used_today.as_hidden }}
+      <li class="list-group-item"><button class="button" type="submit">Добавить</button></li>
+    </ul>
+  </form>
+</div>
+<div class="container">
+    <table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Название</th>
+            <th scope="col">Исп. сегодня</th>
+            <th scope="col">Количество</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        {% for item in items %}
+            <tr>
+                <td>{{ item.name }}</td>
+                <td>{{ item.used_today }}</td>
+                <form method="get" class="card-body">
+                <input type="hidden" name="name" value="{{ item.name }}" id="id_name">
+                <input type="hidden" name="method" value="edit">
+                <td><input type="number" name="amount" value="{{ item.amount }}" id="id_amount"></td>
+                <td><button class="button" type="submit">Изменить</button></td>
+                </form>
+
+                <form method="get" class="card-body">
+                <input type="hidden" name="name" value="{{ item.name }}" id="id_name">
+                <input type="hidden" name="method" value="delete">
+                <td><button class="button" type="submit">Удалить</button></td>
+                </form>
+                
+            </tr>
+        {% endfor %}
+
+    </tbody>
+    </table>
+</div>
+{% else %}
+<div class='item'>
+<p class='desc'>Войдите в систему, чтобы увидеть эту страницу.</p>
+</div>
+{% endif %} 
+{% endblock %}
